@@ -1,0 +1,2 @@
+C:/Users/KHIZAR/Documents/GitHub/gift_mobile_app_old/android/app/.cxx/RelWithDebInfo/k1p48164/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/KHIZAR/Documents/GitHub/gift_mobile_app_old/android/app/.cxx/RelWithDebInfo/k1p48164/x86_64/CMakeFiles/rebuild_cache.dir

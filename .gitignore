@@ -1,0 +1,4 @@
+-e "\n.dart_tool/\n.flutter-plugins-dependencies\n.idea/" 
+.dart_tool/ 
+.flutter-plugins-dependencies 
+.idea/ 

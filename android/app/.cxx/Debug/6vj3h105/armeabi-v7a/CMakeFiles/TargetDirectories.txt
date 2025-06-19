@@ -1,0 +1,2 @@
+C:/Users/KHIZAR/Documents/GitHub/gift_mobile_app/android/app/.cxx/Debug/6vj3h105/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/KHIZAR/Documents/GitHub/gift_mobile_app/android/app/.cxx/Debug/6vj3h105/armeabi-v7a/CMakeFiles/rebuild_cache.dir

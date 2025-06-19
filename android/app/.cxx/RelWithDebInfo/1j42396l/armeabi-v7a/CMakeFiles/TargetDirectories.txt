@@ -1,0 +1,2 @@
+G:/gift_mobile_app_old/android/app/.cxx/RelWithDebInfo/1j42396l/armeabi-v7a/CMakeFiles/edit_cache.dir
+G:/gift_mobile_app_old/android/app/.cxx/RelWithDebInfo/1j42396l/armeabi-v7a/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,2 @@
+G:/gift_mobile_app_old/android/app/.cxx/Debug/1i3wl2e6/x86_64/CMakeFiles/edit_cache.dir
+G:/gift_mobile_app_old/android/app/.cxx/Debug/1i3wl2e6/x86_64/CMakeFiles/rebuild_cache.dir
