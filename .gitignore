@@ -1,4 +1,21 @@
--e "\n.dart_tool/\n.flutter-plugins-dependencies\n.idea/" 
-.dart_tool/ 
-.flutter-plugins-dependencies 
-.idea/ 
+# Flutter & Dart
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.melos_tool/
+
+# IDE files
+.idea/
+.vscode/
+
+# Executables
+*.apk
+*.ipa
+*.keystore
+
+# OS junk
+.DS_Store
+Thumbs.db
