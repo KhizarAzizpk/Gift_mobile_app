@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class OrderModel {
   final String orderId;
   final String productId;
@@ -8,8 +10,8 @@ class OrderModel {
   final String? description;
   final bool isCompleted;
   final DateTime timestamp;
-          int  currentStep;
-  // final int quantity;
+  int currentStep;
+  final int quantity;
 
   OrderModel({
     required this.orderId,
@@ -22,7 +24,7 @@ class OrderModel {
     required this.isCompleted,
     required this.timestamp,
     required this.currentStep,
-    // required this.quantity,
+    required this.quantity,
   });
 
   Map<String, dynamic> toJson() {
@@ -35,43 +37,64 @@ class OrderModel {
       'ratings': ratings,
       'description': description,
       'isCompleted': isCompleted,
-      'timestamp': timestamp.toIso8601String(),
-      'currentStep':currentStep,
-      // 'quantity' :quantity,
+      'timestamp': Timestamp.fromDate(timestamp), // Save as Firestore Timestamp
+      'currentStep': currentStep,
+      'quantity': quantity,
     };
   }
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
+    final timestampRaw = json['timestamp'];
+
+    DateTime parsedTimestamp;
+    if (timestampRaw is Timestamp) {
+      parsedTimestamp = timestampRaw.toDate();
+    } else if (timestampRaw is String) {
+      parsedTimestamp = DateTime.tryParse(timestampRaw) ?? DateTime.now();
+    } else {
+      parsedTimestamp = DateTime.now(); // fallback
+    }
+
     return OrderModel(
       orderId: json['orderId'],
       productId: json['productId'],
       title: json['title'],
       image: json['image'],
-      price: json['price'],
-      ratings: json['ratings'],
+      price: (json['price'] as num).toDouble(),
+      ratings: (json['ratings'] as num).toDouble(),
       description: json['description'],
       isCompleted: json['isCompleted'] ?? false,
-      timestamp: DateTime.parse(json['timestamp']),
-      currentStep: json['currentStep']?? 0,
-      // quantity: json['quantity'],
+      timestamp: parsedTimestamp,
+      currentStep: json['currentStep'] ?? 0,
+      quantity: json['quantity'] ?? 1,
     );
   }
 
-  OrderModel copyWith({bool? isCompleted,  int? currentStep}) {
+  OrderModel copyWith({
+    String? orderId,
+    String? productId,
+    String? title,
+    String? image,
+    double? price,
+    double? ratings,
+    String? description,
+    bool? isCompleted,
+    DateTime? timestamp,
+    int? currentStep,
+    int? quantity,
+  }) {
     return OrderModel(
-      orderId: orderId,
-      productId: productId,
-      title: title,
-      image: image,
-      price: price,
-      ratings: ratings,
-      description: description,
+      orderId: orderId ?? this.orderId,
+      productId: productId ?? this.productId,
+      title: title ?? this.title,
+      image: image ?? this.image,
+      price: price ?? this.price,
+      ratings: ratings ?? this.ratings,
+      description: description ?? this.description,
       isCompleted: isCompleted ?? this.isCompleted,
-      timestamp: timestamp,
-      currentStep: currentStep?? this.currentStep,
-      // quantity: quantity,
+      timestamp: timestamp ?? this.timestamp,
+      currentStep: currentStep ?? this.currentStep,
+      quantity: quantity ?? this.quantity,
     );
   }
-
-
 }

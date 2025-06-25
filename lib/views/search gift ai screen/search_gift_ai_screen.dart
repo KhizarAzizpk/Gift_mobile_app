@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:gift_mobile_app/controllers/home_controller.dart';
+import 'package:gift_mobile_app/controllers/order_controller.dart';
 import 'package:gift_mobile_app/controllers/search_gift_controller.dart';
 import 'package:gift_mobile_app/utils/constants/app_assets.dart';
 import 'package:gift_mobile_app/utils/constants/app_color.dart';
@@ -27,7 +28,6 @@ class SearchGiftAiScreen extends GetView<SearchGiftController> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController dobcontroller = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-
   String? interested;
   String? notInterested;
   String? theme;
@@ -120,17 +120,45 @@ class SearchGiftAiScreen extends GetView<SearchGiftController> {
               ),
             ),
             kGap10,
+            // Padding(
+            //   padding: EdgeInsets.only(left: 12, right: 12),
+            //   child: CustomTextFormField(
+            //     controller: dobcontroller,
+            //     onChanged: (value) =>
+            //         searchController.subProfileModel.value.dateOfBirth = value,
+            //     hintText: "Date Of Birth",
+            //     hintStyle: TextStyle(color: Colors.grey),
+            //     courserColor: Colors.grey,
+            //   ),
+            // ),
             Padding(
               padding: EdgeInsets.only(left: 12, right: 12),
-              child: CustomTextFormField(
-                controller: dobcontroller,
-                onChanged: (value) =>
-                    searchController.subProfileModel.value.dateOfBirth = value,
-                hintText: "Date Of Birth",
-                hintStyle: TextStyle(color: Colors.grey),
-                courserColor: Colors.grey,
+              child: GestureDetector(
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime(2000),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                  );
+
+                  if (pickedDate != null) {
+                    String formattedDate = "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+                    dobcontroller.text = formattedDate;
+                    searchController.subProfileModel.value.dateOfBirth = formattedDate;
+                  }
+                },
+                child: AbsorbPointer(
+                  child: CustomTextFormField(
+                    controller: dobcontroller,
+                    hintText: "Date Of Birth",
+                    hintStyle: TextStyle(color: Colors.grey),
+                    courserColor: Colors.grey,
+                  ),
+                ),
               ),
             ),
+
             kGap10,
             Padding(
               padding: EdgeInsets.only(left: 12, right: 12),

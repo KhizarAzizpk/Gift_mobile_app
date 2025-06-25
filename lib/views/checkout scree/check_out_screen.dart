@@ -8,6 +8,8 @@ import 'package:gift_mobile_app/utils/style/app_style.dart';
 import 'package:gift_mobile_app/views/checkout%20scree/order_confirmation.dart';
 import 'package:gift_mobile_app/widgets/widgets.dart';
 
+import '../../controllers/order_controller.dart';
+import '../../models/newproduct_model.dart';
 import '../../models/order_model.dart';
 
 class CheckoutScreen extends StatelessWidget {
@@ -17,6 +19,7 @@ class CheckoutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartController = Get.find<CartController>();
     final profileController = Get.find<ProfileController>();
+    final orderController = Get.find<OrderController>();
     final item = cartController.selectedItems.first;
     debugPrint("here is the text for ${profileController.addressController.value.text}");
 
@@ -169,27 +172,45 @@ class CheckoutScreen extends StatelessWidget {
                 //placing order logic here ...
                 final cartController = Get.find<CartController>();
                 final item = cartController.selectedItems.first;
+                cartController.removeCartProduct(item);
 
-                final order = OrderModel(
-                  orderId: DateTime.now().millisecondsSinceEpoch.toString(),
-                  productId: item.id,
+
+
+                // final order = OrderModel(
+                //   orderId: DateTime.now().millisecondsSinceEpoch.toString(),
+                //   productId: item.id,
+                //   title: item.title,
+                //   image: item.imagePath,
+                //   price: item.price * item.count,
+                //   ratings: item.rating ?? 0.0,
+                //   // description: item.description,
+                //   isCompleted: false,
+                //   timestamp: DateTime.now(),
+                //   currentStep: 0,
+                //   quantity: item.count,
+                //
+                // );
+                //
+                // await cartController.placeOrder(order);
+                final order = Product(
+                  id: item.id,
                   title: item.title,
                   image: item.imagePath,
-                  price: item.price * item.count,
+                  price: item.price,
                   ratings: item.rating ?? 0.0,
-                  // description: item.description,
-                  isCompleted: false,
-                  timestamp: DateTime.now(),
-                  currentStep: 0,
+                  quantity: item.count,
+                  description: '', // if available
                 );
 
-                await cartController.placeOrder(order);
+                await orderController.addOrderToFirestore(order);
+                
+                await cartController.updateCartInFirestore();
                 Get.snackbar("Order placed", "Your order has been placed succesfully",
                 colorText: Colors.white,
                   backgroundColor: Colors.amberAccent,
                 );
 
-                // Optionally navigate back or to order confirmation screen
+                //Optionally navigate back or to order confirmation screen
                Get.to(()=>OrderConfirmationScreen(order: order));
 
 

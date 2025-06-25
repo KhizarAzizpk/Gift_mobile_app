@@ -6,9 +6,10 @@ class Product {
   final String? description;
   final double ratings;
   // final int currentStep;
+  final int quantity;
 
 
-  Product({required this.title, required this.image, required this.price,this.description,required this.ratings,required this.id, });
+  Product({required this.title, required this.image, required this.price,this.description,required this.ratings,required this.id,required this.quantity });
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
@@ -18,6 +19,7 @@ class Product {
       id:json['asin'],
       description: json['description']?? '',
       ratings:  _parseRating(json['product_star_rating']),
+      quantity: json['quantity']??1,
       // currentStep: json['currentStep'],
     );
   }

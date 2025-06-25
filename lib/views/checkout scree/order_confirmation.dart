@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:gift_mobile_app/models/newproduct_model.dart';
 import 'package:gift_mobile_app/views/search%20gift%20ai%20screen/search_gift_ai_screen.dart';
 
 import '../../models/order_model.dart';
 
 class OrderConfirmationScreen extends StatelessWidget {
-  final OrderModel order;
+  final Product order;
 
   const OrderConfirmationScreen({super.key, required this.order});
 
@@ -23,11 +24,11 @@ class OrderConfirmationScreen extends StatelessWidget {
             const SizedBox(height: 16),
             Text('Thank you for your order!', style: TextStyle(fontSize: 18)),
             SizedBox(height: 8),
-            Text('Order ID: ${order.orderId}'),
+            Text('Order ID: ${order.id}'),
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: ()=> Get.to(() => SearchGiftAiScreen()),
-              child: const Text("Home Screen")
+              child: const Text("Done")
             ),
 
           ],

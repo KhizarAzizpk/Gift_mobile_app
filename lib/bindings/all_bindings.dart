@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/instance_manager.dart';
 import 'package:gift_mobile_app/controllers/OrderTrackerController.dart';
 import 'package:gift_mobile_app/controllers/cart_controller.dart';
+import 'package:gift_mobile_app/controllers/favorite_controller.dart';
 import 'package:gift_mobile_app/controllers/home_controller.dart';
 import 'package:gift_mobile_app/controllers/login_controller.dart';
 import 'package:gift_mobile_app/controllers/order_controller.dart';
@@ -24,5 +25,6 @@ class AllBindings implements Bindings {
     Get.lazyPut<OrderController>(()=>OrderController(),fenix: true);
     Get.lazyPut<CartController>(()=>CartController(),fenix: true);
     Get.put<OrderTrackerController>(OrderTrackerController(), permanent: true);
+    Get.lazyPut<FavoriteController>(()=>FavoriteController(),fenix:true);
   }
 }

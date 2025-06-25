@@ -113,6 +113,14 @@ class ProductDetailScreen extends StatelessWidget {
                       color: Colors.white,
                     ),
                     onPressed: () {
+                      if(cardNumberController.text.isEmpty  ||
+                      expiryDateController.text.isEmpty||
+                      cvvController.text.isEmpty||
+                      cardNumberController.text.isEmpty){
+                        Get.snackbar("Add payment method first", "please add payment method first before placing the order",colorText: Colors.white,backgroundColor: Colors.amber[700]);
+                      return ;
+                      }
+
                       final OrderController orderController =
                           Get.find<OrderController>();
                       orderController.addOrderToFirestore(product);
@@ -144,7 +152,7 @@ class ProductDetailScreen extends StatelessWidget {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      _showPaymentPopup(context);
+                      showPaymentPopup(context);
                     }),
               ),
             ),
@@ -155,85 +163,268 @@ class ProductDetailScreen extends StatelessWidget {
     );
   }
 
-  void _showPaymentPopup(BuildContext context) {
+
+  // void _showPaymentPopup(BuildContext context) {
+  //   final screenWidth = MediaQuery.of(context).size.width;
+  //
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return Dialog(
+  //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+  //         insetPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 24), // padding around dialog
+  //         child: Container(
+  //           width: screenWidth * 0.95, // now it will actually respect this
+  //           constraints: BoxConstraints(maxHeight: 330), // shorter
+  //           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+  //           child: Form(
+  //             key: _formKey,
+  //             child: Column(
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: [
+  //                 const Text(
+  //                   "Add Payment Method",
+  //                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+  //                 ),
+  //                 const SizedBox(height: 12),
+  //
+  //                 CustomTextFormField(
+  //                   controller: cardNumberController,
+  //                   labelText: "Card Number",
+  //                   hintText: "Enter card number",
+  //                   keyboardType: TextInputType.number,
+  //                   prefixIcon: Icon(Icons.credit_card),
+  //                   validator: (value) =>
+  //                   value!.isEmpty ? "Enter card number" : null,
+  //                 ),
+  //                 const SizedBox(height: 8),
+  //
+  //                 Row(
+  //                   children: [
+  //                     Expanded(
+  //                       child: CustomTextFormField(
+  //                         controller: expiryDateController,
+  //                         labelText: "Expiry Date",
+  //                         hintText: "MM/YY",
+  //                         keyboardType: TextInputType.datetime,
+  //                         prefixIcon: Icon(Icons.calendar_today),
+  //                         validator: (value) =>
+  //                         value!.isEmpty ? "Enter expiry date" : null,
+  //                       ),
+  //                     ),
+  //                     const SizedBox(width: 12),
+  //                     Expanded(
+  //                       child: CustomTextFormField(
+  //                         controller: cvvController,
+  //                         labelText: "CVV",
+  //                         hintText: "Enter CVV",
+  //                         keyboardType: TextInputType.number,
+  //                         obscureText: true,
+  //                         prefixIcon: Icon(Icons.lock),
+  //                         validator: (value) =>
+  //                         value!.isEmpty ? "Enter CVV" : null,
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //                 const SizedBox(height: 8),
+  //
+  //                 CustomTextFormField(
+  //                   controller: cardHolderNameController,
+  //                   labelText: "Cardholder Name",
+  //                   hintText: "Enter cardholder name",
+  //                   keyboardType: TextInputType.text,
+  //                   prefixIcon: Icon(Icons.person),
+  //                   validator: (value) =>
+  //                   value!.isEmpty ? "Enter cardholder name" : null,
+  //                 ),
+  //                 const SizedBox(height: 20),
+  //
+  //                 Row(
+  //                   mainAxisAlignment: MainAxisAlignment.end,
+  //                   children: [
+  //                     TextButton(
+  //                       onPressed: () => Navigator.pop(context),
+  //                       child: const Text("Cancel"),
+  //                     ),
+  //                     ElevatedButton(
+  //                       onPressed: () {
+  //                         if (_formKey.currentState!.validate()) {
+  //                           Navigator.pop(context);
+  //                           ScaffoldMessenger.of(context).showSnackBar(
+  //                             const SnackBar(
+  //                               content:
+  //                               Text("Payment method added successfully!"),
+  //                             ),
+  //                           );
+  //                         }
+  //                       },
+  //                       child: const Text("Add"),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  void showPaymentPopup(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+
+    final TextEditingController cardNumberController = TextEditingController();
+    final TextEditingController expiryDateController = TextEditingController();
+    final TextEditingController cvvController = TextEditingController();
+    final TextEditingController cardHolderNameController = TextEditingController();
+
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          title: Text("Add Payment Method"),
-          content: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CustomTextFormField(
-                    controller: cardNumberController,
-                    labelText: "Card Number",
-                    hintText: "Enter card number",
-                    keyboardType: TextInputType.number,
-                    prefixIcon: Icon(Icons.credit_card),
-                    validator: (value) =>
-                        value!.isEmpty ? "Enter card number" : null,
-                  ),
-                  kGap8,
-                  CustomTextFormField(
-                    controller: expiryDateController,
-                    labelText: "Expiry Date",
-                    hintText: "MM/YY",
-                    keyboardType: TextInputType.datetime,
-                    prefixIcon: Icon(Icons.calendar_today),
-                    validator: (value) =>
-                        value!.isEmpty ? "Enter expiry date" : null,
-                  ),
-                  kGap8,
-                  CustomTextFormField(
-                    controller: cvvController,
-                    labelText: "CVV",
-                    hintText: "Enter CVV",
-                    keyboardType: TextInputType.number,
-                    obscureText: true,
-                    prefixIcon: Icon(Icons.lock),
-                    validator: (value) => value!.isEmpty ? "Enter CVV" : null,
-                  ),
-                  kGap8,
-                  CustomTextFormField(
-                    controller: cardHolderNameController,
-                    labelText: "Cardholder Name",
-                    hintText: "Enter cardholder name",
-                    keyboardType: TextInputType.text,
-                    prefixIcon: Icon(Icons.person),
-                    validator: (value) =>
-                        value!.isEmpty ? "Enter cardholder name" : null,
-                  ),
-                ],
+        final screenWidth = MediaQuery.of(context).size.width;
+
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          child: SingleChildScrollView(
+            child: Container(
+              width: screenWidth * 0.95,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      "Choose Your Payment Method",
+                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Payment method icons
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          SvgPicture.asset("assets/icons/paypal_icon.svg", height: 80, width: 60),
+                          const SizedBox(width: 44),
+                          SvgPicture.asset("assets/icons/apple_icon.svg", height: 60, width: 60),
+                          const SizedBox(width: 44),
+                          Image.asset("assets/images/Stripe.png", height: 200, width: 80),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 30),
+
+                    // Card Number
+                    TextFormField(
+                      controller: cardNumberController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: "Card Number",
+                        prefixIcon: Icon(Icons.credit_card),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) =>
+                      value!.isEmpty ? "Please enter card number" : null,
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Expiry + CVV
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: expiryDateController,
+                            keyboardType: TextInputType.datetime,
+                            decoration: InputDecoration(
+                              labelText: "Expiry Date",
+                              hintText: "MM/YY",
+                              prefixIcon: Icon(Icons.date_range),
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) =>
+                            value!.isEmpty ? "Enter expiry date" : null,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: TextFormField(
+                            controller: cvvController,
+                            keyboardType: TextInputType.number,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              labelText: "CVV",
+                              prefixIcon: Icon(Icons.lock),
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) =>
+                            value!.isEmpty ? "Enter CVV" : null,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Cardholder Name
+                    TextFormField(
+                      controller: cardHolderNameController,
+                      decoration: InputDecoration(
+                        labelText: "Cardholder Name",
+                        prefixIcon: Icon(Icons.person),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) =>
+                      value!.isEmpty ? "Enter name on card" : null,
+                    ),
+                    const SizedBox(height: 180),
+
+                    // Buttons
+                    const SizedBox(width: 10),
+                    SizedBox(
+                      width: 220,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Payment Confirmed"),
+                              ),
+                            );
+                          }
+                        },
+                        child: const Text(
+                          "Confirm Payment",
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("Cancel"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        content: Text("Payment method added successfully!")),
-                  );
-                }
-              },
-              child: Text("Add"),
-            ),
-          ],
         );
       },
     );
   }
+
+
+
+
+
+
 
   void _showCartPopup(BuildContext context) {
     showDialog(

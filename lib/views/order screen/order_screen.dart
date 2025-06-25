@@ -82,13 +82,6 @@ class OngoingOrders extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          AppString.ongoingOrder,
-          style: AppStyle.urbanistBold24Black,
-        ),
-      ),
       body: Obx(() {
         if (orderController.isloading.value) {
           return const Center(
@@ -135,6 +128,7 @@ class OngoingOrders extends StatelessWidget {
                 subtitle: CustomText(
                   text:
                   // 'Price: \$${order.price.toStringAsFixed(2)}'
+                  'Quantity:${order.quantity.toString()}'
                       '\nRatings: ${order.ratings} ⭐',
                   style: const TextStyle(
                     fontSize: 14,

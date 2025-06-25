@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gift_mobile_app/controllers/favorite_controller.dart';
 import 'package:gift_mobile_app/utils/utils.dart';
+import 'package:gift_mobile_app/views/favorite%20product%20screen/favorite_product.dart';
 import 'package:gift_mobile_app/views/generated%20gift%20screen/product_detail_screen.dart';
 import 'package:gift_mobile_app/widgets/widgets.dart';
 
 import '../../core/services/fetching_category.dart';
+import '../../models/favorite_model.dart';
 import '../../models/newproduct_model.dart';
 
 class GeneratedGiftScreen extends StatefulWidget {
+  final favoriteController = Get.find<FavoriteController>();
+
   @override
   _GeneratedGiftScreenState createState() => _GeneratedGiftScreenState();
 }
@@ -53,7 +58,6 @@ class _GeneratedGiftScreenState extends State<GeneratedGiftScreen> {
     });
 
     try {
-
       final newProducts = await AmazonService.fetchProducts(
         page: _currentPage,
         interested: interested,
@@ -70,7 +74,7 @@ class _GeneratedGiftScreenState extends State<GeneratedGiftScreen> {
         _currentPage++;
         _isLoading = false;
       });
-    } catch (e,stackTrace) {
+    } catch (e, stackTrace) {
       debugPrint('Error loading products: $e');
       debugPrint('Stack trace: $stackTrace');
       setState(() {
@@ -95,6 +99,7 @@ class _GeneratedGiftScreenState extends State<GeneratedGiftScreen> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: AppString.giftforkids,
         titleStyle: AppStyle.urbanistBold24Black,
@@ -116,47 +121,74 @@ class _GeneratedGiftScreenState extends State<GeneratedGiftScreen> {
 
           final product = _products[index];
 
-          return Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Stack(
               children: [
-                GestureDetector(
-                  onTap: () {
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ProductDetailScreen(product: product)),
-                    );
-                    print("hereee is the ${product.id}");
-                  },
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-                    child: Image.network(
-                      product.image,
-                      height: 180,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          Icon(Icons.broken_image),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ProductDetailScreen(product: product)),
+                        );
+                        print("hereee is the ${product.id}");
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+                        child: Image.network(
+                          product.image,
+                          height: 180,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Icon(Icons.broken_image),
+                        ),
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        product.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        '\$${double.tryParse(product.price.toString())?.toStringAsFixed(2) ?? 'N/A'}',
+                        style: TextStyle(color: Colors.green),
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    product.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    '\$${double.tryParse(product.price.toString())?.toStringAsFixed(2) ?? 'N/A'}',
-                    style: TextStyle(color: Colors.green),
-                  ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Obx(() {
+                    final isFav = widget.favoriteController.isFavorited(product.id);
+                    return IconButton(
+                      icon: Icon(
+                        isFav ? Icons.favorite : Icons.favorite_border,
+                        color: isFav ? Colors.red : Colors.white,
+                      ),
+                      onPressed: () {
+                        widget.favoriteController.toggleFavorite(FavoriteModel(
+                          id: product.id,
+                          title: product.title,
+                          image: product.image,
+                          price: product.price,
+                        ));
+                        Get.to(FavoriteScreen());
+                      },
+                    );
+                  }),
                 ),
               ],
             ),

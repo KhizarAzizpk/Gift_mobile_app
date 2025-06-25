@@ -389,6 +389,8 @@ class Assets {
   /// Assets for assetsImagesAddressImage
   /// assets/images/Address_icom.png
   static const String assetsImagesAddressImage = "assets/images/Address_icon.png";
+  //Asstes for Stripe
+  static const String assetsImageStripe ="assets/images/Stripe.png";
 
   ///Assets for asseteditImage
  ///assets/images/Edit.png
